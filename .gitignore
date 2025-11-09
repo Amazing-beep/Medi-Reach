@@ -5,15 +5,18 @@ __pycache__/
 *.pyd
 *.pyc
 
-# Virtual environment
+# Virtual environments
 venv/
 env/
 .venv/
 
-# Database
-instance/medi_reach.db
+# Databases (SQLite etc.)
+*.db
+*.sqlite3
+instance/*.db
+instance/*.sqlite3
 
-# Flask instance folder
+# Flask instance folder (holds config or DBs)
 instance/
 
 # Logs

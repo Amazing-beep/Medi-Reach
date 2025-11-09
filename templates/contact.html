@@ -1,25 +1,49 @@
 {% extends "base.html" %}
 {% block title %}Medi-Reach | Contact{% endblock %}
+
 {% block content %}
   <h2>Contact Us</h2>
+
+  <!-- ✅ Flash messages -->
+  {% with messages = get_flashed_messages(with_categories=true) %}
+    {% if messages %}
+      <ul class="flash-messages">
+        {% for category, message in messages %}
+          <li class="{{ category }}">{{ message }}</li>
+        {% endfor %}
+      </ul>
+    {% endif %}
+  {% endwith %}
+
   <form method="post" class="form">
     <label>
       <span>Name</span>
-      <input type="text" name="name" required />
+      <input type="text" name="name" placeholder="Your Name" required />
     </label>
 
     <label>
       <span>Email</span>
-      <input type="email" name="email" required />
+      <input type="email" name="email" placeholder="your@email.com" required />
     </label>
 
     <label>
       <span>Message</span>
-      <textarea name="message" rows="4" required></textarea>
+      <textarea name="message" rows="4" placeholder="Write your message here..." required></textarea>
     </label>
 
     <button class="btn" type="submit">Send</button>
   </form>
+
+  <div class="contact-info" style="margin-top:20px;">
+    <h3>Our Office</h3>
+    <p>Email: support@medi-reach.com</p>
+    <p>Phone: +1 (800) 555-MEDI</p>
+  </div>
+
+  <style>
+    .flash-messages { list-style: none; padding: 0; }
+    .flash-messages li { margin: 10px 0; padding: 10px; border-radius: 6px; }
+    .flash-messages .success { background-color: #d4edda; color: #155724; }
+    .flash-messages .error { background-color: #f8d7da; color: #721c24; }
+  </style>
 {% endblock %}
-
-
