@@ -1,437 +1,221 @@
-/* Medi-Reach CSS - Bridging Healthcare Gaps */
-:root {
-  --primary-color: #2E8B57; /* Sea Green - represents health and growth */
-  --primary-dark: #1E6B47;
-  --secondary-color: #4682B4; /* Steel Blue - trust and reliability */
-  --accent-color: #FF7F50; /* Coral - call to action */
-  --light-color: #F8F9FA;
-  --dark-color: #343A40;
-  --text-color: #333333;
-  --text-light: #6C757D;
-  --white: #FFFFFF;
-  --shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-  --border-radius: 8px;
-  --transition: all 0.3s ease;
-}
-
-/* Base Styles */
+/* Reset and Base Styles */
 * {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
 }
 
 body {
-  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-  line-height: 1.6;
-  color: var(--text-color);
-  background-color: var(--white);
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+    background-color: #ffffff;
+    color: #333333;
+    line-height: 1.6;
 }
 
-.container {
-  width: 100%;
-  max-width: 1200px;
-  margin: 0 auto;
-  padding: 0 20px;
+.app-container {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
 }
 
-/* Typography */
-h1, h2, h3, h4, h5, h6 {
-  margin-bottom: 1rem;
-  line-height: 1.2;
-  color: var(--dark-color);
+/* Header Styles - Matching Figma dark blue */
+.header {
+    background-color: #1a237e; /* Dark blue from Figma */
+    color: white;
+    padding: 1rem 0;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
 }
 
-h1 {
-  font-size: 2.5rem;
+.header-content {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 2rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
 }
 
-h2 {
-  font-size: 2rem;
-  text-align: center;
-  margin-bottom: 2rem;
+.logo {
+    font-size: 1.8rem;
+    font-weight: bold;
+    letter-spacing: -0.5px;
+    color: white;
 }
 
-p {
-  margin-bottom: 1rem;
+.navigation {
+    display: flex;
+    gap: 2rem;
 }
 
-/* Button Styles */
+.nav-link {
+    color: white;
+    text-decoration: none;
+    font-weight: 500;
+    padding: 0.5rem 1rem;
+    border-radius: 6px;
+    transition: background-color 0.3s ease;
+}
+
+.nav-link:hover {
+    background-color: rgba(255, 255, 255, 0.1);
+}
+
+/* Main Content */
+.main-content {
+    flex: 1;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 2rem;
+    width: 100%;
+    background-color: #ffffff;
+}
+
+/* Form Styles */
+.form-container {
+    max-width: 400px;
+    margin: 2rem auto;
+    padding: 2rem;
+    background: white;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    border: 1px solid #e0e0e0;
+}
+
+.form-title {
+    text-align: center;
+    margin-bottom: 2rem;
+    color: #1a237e; /* Dark blue */
+    font-size: 1.5rem;
+    font-weight: 600;
+}
+
+.form-group {
+    margin-bottom: 1.5rem;
+}
+
+.form-label {
+    display: block;
+    margin-bottom: 0.5rem;
+    font-weight: 500;
+    color: #1a237e; /* Dark blue */
+}
+
+.form-input {
+    width: 100%;
+    padding: 0.75rem 1rem;
+    border: 2px solid #e0e0e0;
+    border-radius: 6px;
+    font-size: 1rem;
+    transition: border-color 0.3s ease;
+    background-color: #fafafa;
+}
+
+.form-input:focus {
+    outline: none;
+    border-color: #1a237e; /* Dark blue */
+    background-color: white;
+}
+
+/* Button Styles - Dark blue to match Figma */
 .btn {
-  display: inline-block;
-  padding: 12px 24px;
-  border-radius: var(--border-radius);
-  text-decoration: none;
-  font-weight: 600;
-  text-align: center;
-  transition: var(--transition);
-  border: none;
-  cursor: pointer;
-  font-size: 1rem;
+    display: inline-block;
+    padding: 0.75rem 2rem;
+    background-color: #1a237e; /* Dark blue */
+    color: white;
+    text-decoration: none;
+    border: none;
+    border-radius: 6px;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    text-align: center;
 }
 
-.btn.primary {
-  background-color: var(--primary-color);
-  color: var(--white);
+.btn:hover {
+    background-color: #283593; /* Slightly lighter blue on hover */
 }
 
-.btn.primary:hover {
-  background-color: var(--primary-dark);
-  transform: translateY(-2px);
-  box-shadow: var(--shadow);
+.btn-full {
+    width: 100%;
 }
 
-.btn.secondary {
-  background-color: transparent;
-  color: var(--primary-color);
-  border: 2px solid var(--primary-color);
+/* Link Styles */
+.text-link {
+    color: #1a237e; /* Dark blue */
+    text-decoration: none;
+    font-weight: 500;
 }
 
-.btn.secondary:hover {
-  background-color: var(--primary-color);
-  color: var(--white);
-  transform: translateY(-2px);
-  box-shadow: var(--shadow);
+.text-link:hover {
+    text-decoration: underline;
 }
 
-.cta-group {
-  display: flex;
-  gap: 1rem;
-  flex-wrap: wrap;
-  justify-content: center;
+.text-center {
+    text-align: center;
 }
 
-/* Hero Section */
-.hero {
-  display: flex;
-  align-items: center;
-  min-height: 80vh;
-  padding: 4rem 2rem;
-  background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+.mt-2 {
+    margin-top: 2rem;
 }
 
-.hero-content {
-  flex: 1;
-  max-width: 600px;
-  margin: 0 auto;
-  text-align: center;
+.mb-2 {
+    margin-bottom: 2rem;
 }
 
-.hero h1 {
-  font-size: 2.8rem;
-  margin-bottom: 1.5rem;
-  color: var(--primary-dark);
+/* Home Page Specific */
+.hero-section {
+    text-align: center;
+    padding: 4rem 2rem;
 }
 
-.hero p {
-  font-size: 1.2rem;
-  margin-bottom: 2rem;
-  color: var(--text-color);
+.hero-title {
+    font-size: 3rem;
+    margin-bottom: 1rem;
+    color: #1a237e; /* Dark blue */
+    font-weight: bold;
 }
 
-.hero-image {
-  flex: 1;
-  display: flex;
-  justify-content: center;
-  align-items: center;
+.hero-subtitle {
+    font-size: 1.2rem;
+    color: #666;
+    max-width: 600px;
+    margin: 0 auto;
 }
 
-.hero-image img {
-  max-width: 100%;
-  height: auto;
+/* Additional utility classes */
+.section-title {
+    color: #1a237e;
+    margin-bottom: 1rem;
+    font-size: 1.25rem;
 }
 
-/* Features Section */
-.features {
-  padding: 5rem 0;
-  background-color: var(--white);
-}
-
-.features-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-  gap: 2rem;
-  margin-top: 3rem;
-}
-
-.feature-card {
-  background: var(--white);
-  border-radius: var(--border-radius);
-  padding: 2rem;
-  text-align: center;
-  box-shadow: var(--shadow);
-  transition: var(--transition);
-}
-
-.feature-card:hover {
-  transform: translateY(-5px);
-  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
-}
-
-.feature-icon {
-  font-size: 3rem;
-  margin-bottom: 1rem;
-}
-
-.feature-card h3 {
-  color: var(--primary-color);
-  margin-bottom: 1rem;
-}
-
-/* Mission Section */
-.mission {
-  padding: 5rem 0;
-  background-color: var(--light-color);
-}
-
-.mission-content {
-  max-width: 800px;
-  margin: 0 auto;
-  text-align: center;
-}
-
-.mission h2 {
-  margin-bottom: 2rem;
-}
-
-.mission p {
-  font-size: 1.1rem;
-  margin-bottom: 1.5rem;
-}
-
-.stats {
-  display: flex;
-  justify-content: space-around;
-  flex-wrap: wrap;
-  margin-top: 3rem;
-  gap: 2rem;
-}
-
-.stat {
-  text-align: center;
-}
-
-.stat-number {
-  display: block;
-  font-size: 2.5rem;
-  font-weight: 700;
-  color: var(--primary-color);
-}
-
-.stat-label {
-  font-size: 1rem;
-  color: var(--text-light);
-}
-
-/* USSD Section */
-.ussd {
-  padding: 5rem 0;
-  background-color: var(--white);
-}
-
-.ussd-content {
-  display: flex;
-  align-items: center;
-  gap: 3rem;
-  flex-wrap: wrap;
-}
-
-.ussd-info {
-  flex: 1;
-  min-width: 300px;
-}
-
-.ussd h2 {
-  text-align: left;
-  margin-bottom: 1.5rem;
-}
-
-.ussd-code {
-  background-color: var(--light-color);
-  padding: 1.5rem;
-  border-radius: var(--border-radius);
-  margin: 2rem 0;
-  text-align: center;
-}
-
-.code {
-  display: block;
-  font-size: 2rem;
-  font-weight: 700;
-  color: var(--primary-color);
-  margin-bottom: 0.5rem;
-}
-
-.instruction {
-  color: var(--text-light);
-}
-
-.ussd-features {
-  list-style-type: none;
-  margin-top: 1.5rem;
-}
-
-.ussd-features li {
-  padding: 0.5rem 0;
-  font-size: 1.1rem;
-}
-
-.ussd-visual {
-  flex: 1;
-  display: flex;
-  justify-content: center;
-  min-width: 300px;
-}
-
-.phone-mockup {
-  width: 280px;
-  height: 500px;
-  background: var(--dark-color);
-  border-radius: 30px;
-  padding: 15px;
-  position: relative;
-  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
-}
-
-.phone-screen {
-  width: 100%;
-  height: 100%;
-  background: var(--light-color);
-  border-radius: 20px;
-  padding: 20px;
-  overflow: hidden;
-}
-
-.ussd-demo {
-  font-family: monospace;
-  font-size: 14px;
-  line-height: 1.5;
-  color: var(--dark-color);
-}
-
-.ussd-demo p {
-  margin-bottom: 10px;
-}
-
-/* Testimonials Section */
-.testimonials {
-  padding: 5rem 0;
-  background-color: var(--light-color);
-}
-
-.testimonial-cards {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-  gap: 2rem;
-  margin-top: 3rem;
-}
-
-.testimonial-card {
-  background: var(--white);
-  border-radius: var(--border-radius);
-  padding: 2rem;
-  box-shadow: var(--shadow);
-  position: relative;
-}
-
-.testimonial-card::before {
-  content: "\201C"; /* Unicode for left double quotation mark */
-  font-size: 4rem;
-  color: var(--primary-color);
-  opacity: 0.2;
-  position: absolute;
-  top: 10px;
-  left: 15px;
-  font-family: serif; /* Ensures the quotation mark displays properly */
-}
-
-.quote {
-  font-style: italic;
-  margin-bottom: 1.5rem;
-  position: relative;
-  z-index: 1;
-}
-
-.author {
-  font-weight: 600;
-  color: var(--primary-color);
-}
-
-/* Final CTA Section */
-.final-cta {
-  padding: 5rem 0;
-  background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
-  color: var(--white);
-  text-align: center;
-}
-
-.final-cta h2 {
-  color: var(--white);
-}
-
-.final-cta p {
-  font-size: 1.2rem;
-  margin-bottom: 2rem;
-  max-width: 600px;
-  margin-left: auto;
-  margin-right: auto;
+.form-description {
+    color: #666;
+    text-align: center;
+    margin-bottom: 1.5rem;
+    line-height: 1.5;
 }
 
 /* Responsive Design */
 @media (max-width: 768px) {
-  .hero {
-    flex-direction: column;
-    text-align: center;
-    padding: 2rem 1rem;
-  }
-  
-  .hero h1 {
-    font-size: 2rem;
-  }
-  
-  .hero p {
-    font-size: 1rem;
-  }
-  
-  .ussd-content {
-    flex-direction: column;
-  }
-  
-  .ussd h2 {
-    text-align: center;
-  }
-  
-  .stats {
-    flex-direction: column;
-    gap: 1.5rem;
-  }
-  
-  .cta-group {
-    flex-direction: column;
-    align-items: center;
-  }
-  
-  .btn {
-    width: 100%;
-    max-width: 300px;
-  }
-}
-
-@media (max-width: 480px) {
-  h1 {
-    font-size: 1.8rem;
-  }
-  
-  h2 {
-    font-size: 1.5rem;
-  }
-  
-  .feature-card, .testimonial-card {
-    padding: 1.5rem;
-  }
-  
-  .phone-mockup {
-    width: 250px;
-    height: 450px;
-  }
+    .header-content {
+        flex-direction: column;
+        gap: 1rem;
+    }
+    
+    .navigation {
+        gap: 1rem;
+        flex-wrap: wrap;
+        justify-content: center;
+    }
+    
+    .hero-title {
+        font-size: 2rem;
+    }
+    
+    .form-container {
+        margin: 1rem;
+        padding: 1.5rem;
+    }
 }

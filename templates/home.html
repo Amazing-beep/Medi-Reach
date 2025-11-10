@@ -1,0 +1,11 @@
+{% extends "index.html" %}
+
+{% block content %}
+<div class="hero-section">
+    <h1 class="hero-title">Medi-Reach</h1>
+    <p class="hero-subtitle">Welcome to Medi-Reach. Use the navigation to browse medicines, place an order, or track your delivery.</p>
+    <div class="mt-2">
+        <a href="{{ url_for('medicines') }}" class="btn">Browse Medicines</a>
+    </div>
+</div>
+{% endblock %}
