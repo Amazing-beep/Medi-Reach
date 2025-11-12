@@ -26,6 +26,9 @@ def home():
 def medicines():
     return render_template("medicines.html")
 
+@app.route("/cart")
+def cart():
+    return render_template("cart.html")
 
 @app.route("/contact")
 def contact():

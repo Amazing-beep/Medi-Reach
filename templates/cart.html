@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+{% block title %}Medi-Reach | Cart{% endblock %}
+{% block content %}
+  <div class="cart-page container">
+    <h2>Your Cart</h2>
+
+    <div id="cart-container" class="cart-container">
+      <!-- Cart items will be dynamically loaded here -->
+    </div>
+
+    <div id="cart-summary" class="cart-summary">
+      <h3>Order Summary</h3>
+      <div class="summary-details">
+        <p><strong>Total Items:</strong> <span id="cart-total-items">0</span></p>
+        <p><strong>Total Cost:</strong> <span id="cart-total-price">0 RWF</span></p>
+      </div>
+      <div class="cart-actions">
+        <button class="btn secondary" onclick="window.location.href='/medicines'">🛒 Continue Shopping</button>
+        <button class="btn primary" id="checkout-btn">✅ Proceed to Checkout</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="{{ url_for('static', filename='cart.js') }}"></script>
+{% endblock %}
