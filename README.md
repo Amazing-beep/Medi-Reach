@@ -73,6 +73,9 @@ Medi-Reach-11/
 - **Primary Color**: #00A896
 - **Responsive**: Mobile-first design
 
+## Demo Video
+https://youtu.be/7gCQirdpjH0?si=dpWRN9kh1kmj48Im
+
 ## 📄 License
 
 This project is part of an academic assignment.
