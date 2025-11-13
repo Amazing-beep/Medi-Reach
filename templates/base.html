@@ -14,7 +14,9 @@
           <a href="{{ url_for('home') }}">Home</a>
           <a href="{{ url_for('medicines') }}">Medicines</a>
           <a href="{{ url_for('track') }}">Track Order</a>
-           <a href="{{ url_for('cart') }}">Cart</a>
+          <a href="{{ url_for('order.payment') }}" class="cart-badge">
+            Cart <span id="cart-badge">0</span>
+          </a>
           {% if session.get('logged_in') %}
             <a href="{{ url_for('auth.logout') }}">Logout ({{ session.get('user_name') }})</a>
           {% else %}
@@ -67,6 +69,31 @@
     </footer>
     <script>
       document.getElementById('year').textContent = new Date().getFullYear();
+      
+      // Update cart badge on all pages
+      function updateCartBadge() {
+        const badge = document.getElementById('cart-badge');
+        if (badge) {
+          try {
+            const cart = JSON.parse(localStorage.getItem('cart')) || [];
+            const totalItems = cart.reduce((sum, item) => sum + item.quantity, 0);
+            badge.textContent = totalItems;
+            if (totalItems > 0) {
+              badge.style.display = 'flex';
+            } else {
+              badge.style.display = 'none';
+            }
+          } catch (e) {
+            badge.style.display = 'none';
+          }
+        }
+      }
+      
+      // Update cart badge on page load
+      document.addEventListener('DOMContentLoaded', updateCartBadge);
+      
+      // Update cart badge when storage changes (for cross-tab updates)
+      window.addEventListener('storage', updateCartBadge);
     </script>
   </body>
 </html>

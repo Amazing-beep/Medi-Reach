@@ -53,8 +53,8 @@ function createMedicineCard(medicine) {
     </div>
     <div class="medicine-name">${medicine.name}</div>
     <div class="medicine-description">${description}</div>
-    <div class="medicine-footer">
-      <div class="medicine-price">${formatPrice(medicine.price)} RWF</div>
+      <div class="medicine-footer">
+      <div class="medicine-price">${formatPrice(medicine.price)}</div>
       <div class="medicine-stock">${stock} in stock</div>
     </div>
     <button class="add-to-cart-btn" onclick="addToCart(${medicine.id}, '${medicine.name.replace(/'/g, "\\'")}', ${medicine.price})">
@@ -87,7 +87,7 @@ function getMedicineDescription(name) {
 
 // Format price
 function formatPrice(price) {
-  return new Intl.NumberFormat('en-US').format(price * 1000); // Convert to RWF (multiply by 1000)
+  return new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' }).format(price);
 }
 
 // Add to cart

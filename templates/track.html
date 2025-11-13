@@ -11,19 +11,20 @@
       <button class="btn primary" type="submit">Track Order</button>
     </form>
 
-    {% if status and order_id %}
+    {% if order_id %}
       <div class="order-status-container">
         <div class="order-status">
           <h3>Order #{{ order_id }}</h3>
-          <p class="status-text">{{ status }}</p>
+          <p class="status-text">{{ status or 'Order is being processed' }}</p>
         </div>
         
         {% if order_data %}
         <div class="order-details-info">
-          <p><strong>Medicine:</strong> {{ order_data.medicine_name }}</p>
-          <p><strong>Quantity:</strong> {{ order_data.quantity }}</p>
-          <p><strong>Total Price:</strong> {{ "%.2f"|format(order_data.total_price) }} RWF</p>
-          <p><strong>Delivery Address:</strong> {{ order_data.delivery_address }}</p>
+          <p><strong>Medicines:</strong> {{ order_data.medicine_summary or 'Preparing items...' }}</p>
+        </div>
+        {% else %}
+        <div class="order-details-info">
+          <p><strong>Medicines:</strong> Preparing items...</p>
         </div>
         {% endif %}
         
@@ -54,7 +55,7 @@
   <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
   
   <script>
-    {% if status and order_id %}
+    {% if order_id %}
     // Initialize map when order is found
     document.addEventListener('DOMContentLoaded', function() {
       // Default coordinates (Kigali, Rwanda)

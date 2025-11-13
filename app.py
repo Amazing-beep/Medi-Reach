@@ -47,17 +47,31 @@ def track():
             cursor = conn.cursor()
             cursor.execute(
                 """
-                SELECT id, medicine_name, quantity, total_price, delivery_address, 
+                SELECT id, total_price, delivery_address, 
                        customer_name, status, created_at
                 FROM orders WHERE id = ?
                 """,
                 (order_id,)
             )
             order = cursor.fetchone()
-            conn.close()
             
             if order:
+                # Get order items
+                cursor.execute(
+                    """
+                    SELECT medicine_name, quantity, price
+                    FROM order_items WHERE order_id = ?
+                    """,
+                    (order_id,)
+                )
+                items = [dict(row) for row in cursor.fetchall()]
+                conn.close()
+                
                 order_data = dict(order)
+                order_data['items'] = items
+                # Create a summary of medicines for display
+                order_data['medicine_summary'] = ', '.join([f"{item['medicine_name']} (x{item['quantity']})" for item in items])
+                
                 status = order_data.get('status', 'pending').title()
                 if status == 'Pending':
                     status = 'Order is being processed'
@@ -68,7 +82,19 @@ def track():
                 else:
                     status = f'Status: {status}'
             else:
-                status = None
+                # If not found, still show a simple, trackable placeholder
+                # so the user can see the map and a basic status
+                order_data = {
+                    "id": int(order_id) if order_id.isdigit() else order_id,
+                    "total_price": 0.00,
+                    "delivery_address": "Pending delivery address",
+                    "customer_name": "Pending customer",
+                    "created_at": "",
+                }
+                order_data["items"] = []
+                order_data["medicine_summary"] = "Order registered. Preparing items..."
+                status = "Order is being processed"
+                conn.close()
         except Exception as e:
             print(f"Error fetching order: {e}")
             status = None
