@@ -1,13 +1,16 @@
 {% extends "base.html" %}
 {% block title %}Medi-Reach | Order{% endblock %}
 {% block content %}
+  <!-- Order form: select medicine, quantity, and enter delivery details -->
   <h2>Place an Order</h2>
   <form method="post" action="{{ url_for('order.submit_order') }}" class="form">
+    <!-- Customer name (prefilled if logged in) -->
     <label>
       <span>Your Name</span>
       <input type="text" name="customer_name" value="{{ user_name }}" required />
     </label>
 
+    <!-- Medicine dropdown populated from server -->
     <label>
       <span>Select Medicine</span>
       <select name="medicine_id" required>
@@ -20,18 +23,19 @@
       </select>
     </label>
 
+    <!-- Quantity input -->
     <label>
       <span>Quantity</span>
       <input type="number" name="quantity" value="1" min="1" required />
     </label>
 
+    <!-- Delivery address textarea -->
     <label>
       <span>Delivery Address</span>
       <textarea name="address" rows="3" placeholder="Enter your delivery address" required></textarea>
     </label>
 
+    <!-- Submit order button -->
     <button class="btn" type="submit">Submit Order</button>
   </form>
 {% endblock %}
-
-

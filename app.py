@@ -1,51 +1,55 @@
+from flask import Flask, url_for, render_template, request  # Import Flask core and helpers
+from api import api_bp  # Import API blueprint for REST endpoints
+from db import init_medicine_table, init_orders_table, seed_medicines  # DB init and seed functions
+from auth import auth_bp  # Auth routes blueprint
+from order import order_bp  # Order routes blueprint
 
-from flask import Flask, url_for, render_template, request
-from api import api_bp
-from db import init_medicine_table, init_orders_table, seed_medicines
-from auth import auth_bp
-from order import order_bp
+app = Flask(__name__)  # Create Flask app instance
+app.secret_key = "replace_with_a_secure_random_key"  # Secret key for session/flash (replace in production)
 
-app = Flask(__name__)
-app.secret_key = "replace_with_a_secure_random_key"
+# Register blueprints to attach route groups to the app
+app.register_blueprint(api_bp)  # Attach /api endpoints
+app.register_blueprint(auth_bp)  # Attach /auth, /login, /signup, /logout
+app.register_blueprint(order_bp)  # Attach /order related endpoints
 
-# Register blueprints
-app.register_blueprint(api_bp)
-app.register_blueprint(auth_bp)
-app.register_blueprint(order_bp)
+# Initialize DB and seed medicines at startup (idempotent)
+init_medicine_table()  # Ensure medicines table exists
+init_orders_table()  # Ensure orders table exists
+seed_medicines()  # Insert demo medicines if table is empty
 
-# Initialize DB and seed medicines
-init_medicine_table()
-init_orders_table()
-seed_medicines()
+@app.route("/", endpoint="home")  # Home page route
 
-@app.route("/", endpoint="home")
-def home():
-    return render_template("index.html")
+def home():  # Handler for home page
+    return render_template("index.html")  # Render landing page template
 
-@app.route("/medicines")
-def medicines():
-    return render_template("medicines.html")
+@app.route("/medicines")  # Medicines listing page route
 
-@app.route("/cart")
-def cart():
-    return render_template("cart.html")
+def medicines():  # Handler for medicines page
+    return render_template("medicines.html")  # Render medicines template
 
-@app.route("/contact")
-def contact():
-    return render_template("contact.html")
+@app.route("/cart")  # Cart page route
 
-@app.route("/track", methods=["GET"])
-def track():
-    order_id = request.args.get("order_id", "")
-    status = None
-    order_data = None
+def cart():  # Handler for cart page
+    return render_template("cart.html")  # Render cart template
+
+@app.route("/contact")  # Contact page route
+
+def contact():  # Handler for contact page
+    return render_template("contact.html")  # Render contact template
+
+@app.route("/track", methods=["GET"])  # Order tracking page route
+
+def track():  # Handler for tracking by order_id query param
+    order_id = request.args.get("order_id", "")  # Read order_id from URL query string
+    status = None  # Human-friendly status text to show
+    order_data = None  # Full order dict for display
     
-    if order_id:
+    if order_id:  # Only query DB if an order_id was provided
         try:
-            from db import get_db_connection
-            conn = get_db_connection()
-            cursor = conn.cursor()
-            cursor.execute(
+            from db import get_db_connection  # Import locally to avoid circular import
+            conn = get_db_connection()  # Open DB connection
+            cursor = conn.cursor()  # Create cursor for queries
+            cursor.execute(  # Fetch order by id
                 """
                 SELECT id, medicine_name, quantity, total_price, delivery_address, 
                        customer_name, status, created_at
@@ -53,13 +57,13 @@ def track():
                 """,
                 (order_id,)
             )
-            order = cursor.fetchone()
-            conn.close()
+            order = cursor.fetchone()  # Get single matching row
+            conn.close()  # Close connection
             
-            if order:
-                order_data = dict(order)
-                status = order_data.get('status', 'pending').title()
-                if status == 'Pending':
+            if order:  # If order exists, transform and format status
+                order_data = dict(order)  # Convert Row to dict for template
+                status = order_data.get('status', 'pending').title()  # Normalize status
+                if status == 'Pending':  # Map raw statuses to friendly text
                     status = 'Order is being processed'
                 elif status == 'Out For Delivery' or status == 'In Transit':
                     status = 'Out for delivery'
@@ -68,15 +72,14 @@ def track():
                 else:
                     status = f'Status: {status}'
             else:
-                status = None
-        except Exception as e:
-            print(f"Error fetching order: {e}")
-            status = None
+                status = None  # No order found
+        except Exception as e:  # Log and fall back silently
+            print(f"Error fetching order: {e}")  # Print error to console
+            status = None  # Do not expose raw error to user
     else:
-        # If no order_id provided, check if there's a demo order
-        status = None
+        status = None  # No order_id provided
     
-    return render_template("track.html", order_id=order_id, status=status, order_data=order_data)
+    return render_template("track.html", order_id=order_id, status=status, order_data=order_data)  # Render tracking page
 
-if __name__ == "__main__":
-    app.run(debug=True)
+if __name__ == "__main__":  # Run only if invoked directly
+    app.run(debug=True)  # Start dev server with auto-reload and debug

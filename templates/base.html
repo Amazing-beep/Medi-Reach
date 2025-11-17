@@ -1,12 +1,14 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
+    <!-- Base metadata and global stylesheet include -->
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>{% block title %}Medi-Reach{% endblock %}</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}" />
   </head>
   <body>
+    <!-- Site header with primary navigation -->
     <header class="site-header">
       <div class="container">
         <a class="brand" href="{{ url_for('home') }}">Medi-Reach</a>
@@ -25,6 +27,7 @@
       </div>
     </header>
 
+    <!-- Main content area with flash messages and page-specific content block -->
     <main class="container">
       {% with messages = get_flashed_messages(with_categories=true) %}
         {% if messages %}
@@ -39,6 +42,7 @@
       {% block content %}{% endblock %}
     </main>
 
+    <!-- Footer with quick links and contact info -->
     <footer class="site-footer">
       <div class="container">
         <div class="footer-content">
@@ -65,6 +69,8 @@
         </div>
       </div>
     </footer>
+
+    <!-- Dynamic current year in footer -->
     <script>
       document.getElementById('year').textContent = new Date().getFullYear();
     </script>

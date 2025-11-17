@@ -1,31 +1,30 @@
-// =======================
-// CART PAGE FUNCTIONALITY
-// =======================
+// Load cart from localStorage or default to empty array (persists between visits)
 let cart = JSON.parse(localStorage.getItem('cart')) || [];
 
-// Initialize cart display
+// On page ready, render cart items and totals
 document.addEventListener('DOMContentLoaded', () => {
-  renderCart();
-  updateCartSummary();
+  renderCart(); // Build cart UI
+  updateCartSummary(); // Show totals
 });
 
-// Render cart items
+// Render all cart items into the cart container
 function renderCart() {
-  const container = document.getElementById('cart-container');
-  container.innerHTML = '';
+  const container = document.getElementById('cart-container'); // Items wrapper
+  container.innerHTML = ''; // Clear existing
 
-  if (cart.length === 0) {
+  if (cart.length === 0) { // Empty state
     container.innerHTML = `
       <div class="empty-cart">
         <p>Your cart is empty 😢</p>
         <a href="/medicines" class="btn primary">Browse Medicines</a>
       </div>`;
-    document.getElementById('cart-summary').style.display = 'none';
-    return;
+    document.getElementById('cart-summary').style.display = 'none'; // Hide summary
+    return; // Stop rendering
   }
 
-  document.getElementById('cart-summary').style.display = 'block';
+  document.getElementById('cart-summary').style.display = 'block'; // Show summary
 
+  // Render each item as a card row
   cart.forEach(item => {
     const card = document.createElement('div');
     card.className = 'cart-item';
@@ -44,51 +43,51 @@ function renderCart() {
       </div>
     `;
 
-    container.appendChild(card);
+    container.appendChild(card); // Append to list
   });
 }
 
-// Update quantity
+// Increase/decrease quantity of a specific item and refresh UI
 function changeQuantity(id, delta) {
-  const item = cart.find(i => i.id === id);
-  if (!item) return;
+  const item = cart.find(i => i.id === id); // Locate item
+  if (!item) return; // Guard
 
-  item.quantity += delta;
-  if (item.quantity <= 0) {
+  item.quantity += delta; // Adjust
+  if (item.quantity <= 0) { // Remove if zero
     cart = cart.filter(i => i.id !== id);
   }
 
-  localStorage.setItem('cart', JSON.stringify(cart));
-  renderCart();
-  updateCartSummary();
-  updateCartBadge();
+  localStorage.setItem('cart', JSON.stringify(cart)); // Persist
+  renderCart(); // Re-render list
+  updateCartSummary(); // Update totals
+  updateCartBadge(); // Update header badge
 }
 
-// Remove item completely
+// Remove an item entirely from the cart
 function removeFromCart(id) {
-  cart = cart.filter(item => item.id !== id);
-  localStorage.setItem('cart', JSON.stringify(cart));
-  renderCart();
-  updateCartSummary();
-  updateCartBadge();
+  cart = cart.filter(item => item.id !== id); // Drop item
+  localStorage.setItem('cart', JSON.stringify(cart)); // Persist
+  renderCart(); // Re-render
+  updateCartSummary(); // Recompute totals
+  updateCartBadge(); // Refresh badge
 }
 
-// Update summary totals
+// Compute totals and render into summary section
 function updateCartSummary() {
-  const totalItems = cart.reduce((sum, item) => sum + item.quantity, 0);
-  const totalPrice = cart.reduce((sum, item) => sum + item.price * item.quantity, 0);
+  const totalItems = cart.reduce((sum, item) => sum + item.quantity, 0); // Count items
+  const totalPrice = cart.reduce((sum, item) => sum + item.price * item.quantity, 0); // Sum price
 
-  document.getElementById('cart-total-items').textContent = totalItems;
-  document.getElementById('cart-total-price').textContent = formatPrice(totalPrice) + ' RWF';
+  document.getElementById('cart-total-items').textContent = totalItems; // Render count
+  document.getElementById('cart-total-price').textContent = formatPrice(totalPrice) + ' RWF'; // Render price
 }
 
-// Format RWF currency
+// Format number with thousands separator (multiply by 1000 to display RWF)
 function formatPrice(price) {
   return new Intl.NumberFormat('en-US').format(price * 1000);
 }
 
-// Proceed to checkout
+// Navigate to order page if cart has items
 document.getElementById('checkout-btn').addEventListener('click', () => {
-  if (cart.length === 0) return;
-  window.location.href = '/order';
+  if (cart.length === 0) return; // Prevent empty checkout
+  window.location.href = '/order'; // Go to order form
 });

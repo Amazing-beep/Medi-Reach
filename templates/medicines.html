@@ -1,6 +1,7 @@
 {% extends "base.html" %}
 {% block title %}Medi-Reach | Medicines{% endblock %}
 {% block content %}
+  <!-- Medicines list page with client-side search -->
   <div class="medicines-page">
     <div class="medicines-header">
       <h2>Available Medicines</h2>
@@ -10,10 +11,12 @@
       </div>
     </div>
 
+    <!-- Grid populated by script.js from /api/medicines -->
     <div id="medicine-container" class="medicines-grid">
       <!-- Medicine cards will be added here by JS -->
     </div>
   </div>
 
+  <!-- Page script to fetch and render medicines -->
   <script src="{{ url_for('static', filename='script.js') }}"></script>
 {% endblock %}
