@@ -38,15 +38,25 @@ def init_orders_table():  # Ensure orders table exists
         CREATE TABLE IF NOT EXISTS orders (
             id INTEGER PRIMARY KEY AUTOINCREMENT,
             user_id INTEGER,
-            medicine_id INTEGER NOT NULL,
-            medicine_name TEXT NOT NULL,
-            quantity INTEGER NOT NULL DEFAULT 1,
             total_price REAL NOT NULL,
             delivery_address TEXT NOT NULL,
             customer_name TEXT NOT NULL,
             status TEXT DEFAULT 'pending',
             created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-            FOREIGN KEY (user_id) REFERENCES users(id),
+            FOREIGN KEY (user_id) REFERENCES users(id)
+        )
+    """
+    )
+    cursor.execute(
+        """
+        CREATE TABLE IF NOT EXISTS order_items (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            order_id INTEGER NOT NULL,
+            medicine_id INTEGER NOT NULL,
+            medicine_name TEXT NOT NULL,
+            quantity INTEGER NOT NULL DEFAULT 1,
+            price REAL NOT NULL,
+            FOREIGN KEY (order_id) REFERENCES orders(id) ON DELETE CASCADE,
             FOREIGN KEY (medicine_id) REFERENCES medicines(id)
         )
     """

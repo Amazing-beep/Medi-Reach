@@ -86,6 +86,17 @@ p {
   box-shadow: var(--shadow);
 }
 
+.btn.danger {
+  background-color: #DC3545;
+  color: var(--white);
+}
+
+.btn.danger:hover {
+  background-color: #B52A37;
+  transform: translateY(-2px);
+  box-shadow: var(--shadow);
+}
+
 .btn.secondary {
   background-color: transparent;
   color: var(--primary-color);
@@ -1282,6 +1293,196 @@ p {
   z-index: 10;
 }
 
+/* Payment Page */
+.payment-page {
+  padding: 2rem 0;
+}
+
+.payment-container {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 2rem;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.cart-summary {
+  background: var(--white);
+  padding: 2rem;
+  border-radius: var(--border-radius);
+  box-shadow: var(--shadow);
+  height: fit-content;
+}
+
+.cart-summary h3 {
+  color: var(--primary-color);
+  margin-bottom: 1.5rem;
+}
+
+#cart-items-container {
+  margin-bottom: 1.5rem;
+}
+
+.cart-item {
+  display: flex;
+  justify-content: space-between;
+  padding: 1rem 0;
+  border-bottom: 1px solid #E2E8F0;
+  gap: 1rem;
+  align-items: center;
+}
+
+.cart-item:last-child {
+  border-bottom: none;
+}
+
+.item-info {
+  flex: 1;
+}
+
+.item-name {
+  font-weight: 600;
+  color: var(--dark-color);
+  margin-bottom: 0.25rem;
+}
+
+.item-details {
+  font-size: 0.9rem;
+  color: var(--text-light);
+}
+
+.item-total {
+  font-weight: 700;
+  color: var(--primary-color);
+  font-size: 1.1rem;
+}
+
+.item-actions {
+  display: flex;
+  align-items: center;
+}
+
+.item-actions .remove-item {
+  background: none;
+  border: none;
+  color: #DC3545;
+  font-weight: 600;
+  cursor: pointer;
+  transition: color 0.2s ease;
+}
+
+.item-actions .remove-item:hover {
+  color: #B52A37;
+  text-decoration: underline;
+}
+
+.cart-total {
+  margin-top: 1.5rem;
+  padding-top: 1.5rem;
+  border-top: 2px solid var(--primary-color);
+}
+
+.total-row {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 0.5rem;
+  font-size: 1.1rem;
+}
+
+.total-row:last-child {
+  margin-bottom: 0;
+  font-size: 1.5rem;
+  font-weight: 700;
+}
+
+.total-price {
+  color: var(--primary-color);
+}
+
+.empty-cart {
+  text-align: center;
+  color: var(--text-light);
+  padding: 2rem;
+}
+
+.payment-form-section {
+  background: var(--white);
+  padding: 2rem;
+  border-radius: var(--border-radius);
+  box-shadow: var(--shadow);
+  height: fit-content;
+}
+
+.payment-form-section h3 {
+  color: var(--primary-color);
+  margin-bottom: 1.5rem;
+}
+
+.payment-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  margin-top: 1.5rem;
+}
+
+.payment-actions .btn {
+  width: 100%;
+}
+
+/* Order ID Section on Payment Page */
+.order-id-section {
+  margin-top: 1.5rem;
+  padding-top: 1.5rem;
+  border-top: 2px solid var(--primary-color);
+  text-align: center;
+}
+
+.order-id-label {
+  font-size: 0.9rem;
+  color: var(--text-light);
+  margin-bottom: 0.5rem;
+}
+
+.order-id-display {
+  font-size: 2rem;
+  font-weight: 700;
+  color: var(--primary-color);
+  margin-bottom: 0.5rem;
+}
+
+.order-id-note {
+  font-size: 0.85rem;
+  color: var(--text-light);
+  margin: 0;
+}
+
+/* Order ID Highlight */
+.order-id-highlight {
+  text-align: center;
+  background: var(--light-color);
+  padding: 2rem;
+  border-radius: var(--border-radius);
+  margin-bottom: 2rem;
+}
+
+.order-id-highlight h3 {
+  color: var(--primary-color);
+  margin-bottom: 1rem;
+}
+
+.order-id-number {
+  font-size: 3rem;
+  font-weight: 700;
+  color: var(--primary-color);
+  margin-bottom: 0.5rem;
+}
+
+.order-id-note {
+  color: var(--text-light);
+  font-size: 0.95rem;
+  margin: 0;
+}
+
 @media (max-width: 768px) {
   .medicines-grid {
     grid-template-columns: 1fr;
@@ -1305,6 +1506,10 @@ p {
   
   .hero-section .hero-subtitle {
     font-size: 1.2rem;
+  }
+  
+  .payment-container {
+    grid-template-columns: 1fr;
   }
 }
 

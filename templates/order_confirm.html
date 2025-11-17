@@ -9,19 +9,25 @@
       
       <!-- Table with key order fields -->
       <div class="order-details">
+        <div class="order-id-highlight">
+          <h3>Your Order ID</h3>
+          <div class="order-id-number">#{{ order.id }}</div>
+          <p class="order-id-note">Use this ID to track your order</p>
+        </div>
+        
         <h3>Order Details</h3>
         <table class="order-table">
           <tr>
-            <td><strong>Order ID:</strong></td>
-            <td>#{{ order.id }}</td>
-          </tr>
-          <tr>
-            <td><strong>Medicine:</strong></td>
-            <td>{{ order.medicine_name }}</td>
-          </tr>
-          <tr>
-            <td><strong>Quantity:</strong></td>
-            <td>{{ order.quantity }}</td>
+            <td><strong>Medicines:</strong></td>
+            <td>
+              {% if order.items %}
+                {% for item in order.items %}
+                  {{ item.medicine_name }} (x{{ item.quantity }})<br>
+                {% endfor %}
+              {% else %}
+                N/A
+              {% endif %}
+            </td>
           </tr>
           <tr>
             <td><strong>Total Price:</strong></td>
@@ -48,9 +54,18 @@
       
       <!-- Actions to continue shopping or return home -->
       <div class="actions">
-        <a href="{{ url_for('order.order') }}" class="btn">Place Another Order</a>
-        <a href="{{ url_for('home') }}" class="btn">Back to Home</a>
+        <a href="{{ url_for('track', order_id=order.id) }}" class="btn primary">Track Your Order</a>
+        <a href="{{ url_for('medicines') }}" class="btn secondary">Continue Shopping</a>
+        <a href="{{ url_for('home') }}" class="btn secondary">Back to Home</a>
       </div>
     </div>
   </div>
+
+  <script>
+    // Clear cart after successful order
+    localStorage.removeItem('cart');
+    if (typeof updateCartBadge === 'function') {
+      updateCartBadge();
+    }
+  </script>
 {% endblock %}

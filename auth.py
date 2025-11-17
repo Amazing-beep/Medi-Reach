@@ -136,8 +136,18 @@ def signup():
         
         # Add user to database
         if add_user(name, phone, address, password):
-            flash('Account created successfully! Please login.', 'success')
-            return redirect(url_for('auth.auth_page'))
+            # Auto-login after successful signup
+            user = verify_user(phone, password)
+            if user:
+                session['user_id'] = user['id']
+                session['user_name'] = user['name']
+                session['user_phone'] = user['phone']
+                session['logged_in'] = True
+                flash(f'Welcome, {user["name"]}! Your account has been created.', 'success')
+                return redirect(url_for('medicines'))
+            else:
+                flash('Account created, please login.', 'success')
+                return redirect(url_for('auth.auth_page'))
         else:
             flash('Phone number already exists! Please use a different number.', 'error')
             return redirect(url_for('auth.auth_page'))

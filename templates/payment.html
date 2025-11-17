@@ -1,0 +1,210 @@
+{% extends "base.html" %}
+{% block title %}Medi-Reach | Payment{% endblock %}
+{% block content %}
+  <div class="payment-page">
+    <h2>Payment & Checkout</h2>
+    
+    <div class="payment-container">
+      <div class="cart-summary">
+        <h3>Order Summary</h3>
+        <div id="cart-items-container">
+          <!-- Cart items will be loaded here -->
+        </div>
+        <div class="cart-total">
+          <div class="total-row">
+            <span>Subtotal:</span>
+            <span id="subtotal">$0.00</span>
+          </div>
+          <div class="total-row">
+            <span>Total:</span>
+            <span id="total-amount" class="total-price">$0.00</span>
+          </div>
+        </div>
+        <div class="order-id-section" id="order-id-section" style="display: none;">
+          <div class="order-id-label">Your Order ID:</div>
+          <div class="order-id-display" id="order-id-display">-</div>
+          <p class="order-id-note">You can track this order using the Track Order page</p>
+        </div>
+      </div>
+
+      <div class="payment-form-section">
+        <form method="post" action="{{ url_for('order.process_payment') }}" id="payment-form" class="form">
+          <h3>Delivery Information</h3>
+          
+          <label>
+            <span>Your Name</span>
+            <input type="text" name="customer_name" id="customer_name" required />
+          </label>
+
+          <label>
+            <span>Delivery Address</span>
+            <textarea name="delivery_address" id="delivery_address" rows="3" placeholder="Enter your complete delivery address" required></textarea>
+          </label>
+
+          <input type="hidden" name="cart_data" id="cart_data" />
+          <input type="hidden" name="order_id" id="order_id" />
+
+          <div class="payment-actions">
+            <button type="submit" class="btn primary" id="submit-payment">Complete Payment</button>
+            <button type="button" class="btn danger" id="cancel-cart">Cancel Cart</button>
+            <a href="{{ url_for('medicines') }}" class="btn secondary">Continue Shopping</a>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // Load cart and draft order ID from localStorage
+    let cart = JSON.parse(localStorage.getItem('cart')) || [];
+    let draftOrderId = localStorage.getItem('draftOrderId') || null;
+    let syncingDraft = false;
+    
+    function generateRandomOrderId() {
+      return Math.floor(100000 + Math.random() * 900000).toString();
+    }
+    
+    function ensureDraftOrderId() {
+      if (!draftOrderId) {
+        draftOrderId = generateRandomOrderId();
+        localStorage.setItem('draftOrderId', draftOrderId);
+      }
+      return draftOrderId;
+    }
+    
+    function attachCartItemEvents() {
+      document.querySelectorAll('.remove-item').forEach(button => {
+        button.addEventListener('click', () => {
+          removeCartItem(parseInt(button.dataset.id, 10));
+        });
+      });
+      
+      const cancelButton = document.getElementById('cancel-cart');
+      if (cancelButton) {
+        cancelButton.addEventListener('click', cancelCart);
+      }
+    }
+    
+    function renderCartItems() {
+      const container = document.getElementById('cart-items-container');
+      const subtotalEl = document.getElementById('subtotal');
+      const totalEl = document.getElementById('total-amount');
+      const cartDataEl = document.getElementById('cart_data');
+      const orderIdSection = document.getElementById('order-id-section');
+      const orderIdEl = document.getElementById('order-id-display');
+      const orderIdInput = document.getElementById('order_id');
+      
+      if (cart.length === 0) {
+        container.innerHTML = '<p class="empty-cart">Your cart is empty. <a href="{{ url_for("medicines") }}">Add items to cart</a></p>';
+        subtotalEl.textContent = '$0.00';
+        totalEl.textContent = '$0.00';
+        cartDataEl.value = '';
+        orderIdEl.textContent = '-';
+        orderIdInput.value = '';
+        orderIdSection.style.display = 'none';
+        document.getElementById('submit-payment').disabled = true;
+        deleteDraftOrderFromServer(draftOrderId);
+        draftOrderId = null;
+        localStorage.removeItem('draftOrderId');
+        return;
+      }
+      
+      let subtotal = 0;
+      let html = '';
+      
+      cart.forEach(item => {
+        const itemTotal = item.price * item.quantity;
+        subtotal += itemTotal;
+        html += `
+          <div class="cart-item">
+            <div class="item-info">
+              <div class="item-name">${item.name}</div>
+              <div class="item-details">Quantity: ${item.quantity} × $${item.price.toFixed(2)}</div>
+            </div>
+            <div class="item-total">$${itemTotal.toFixed(2)}</div>
+            <div class="item-actions">
+              <button type="button" class="remove-item" data-id="${item.id}">Remove</button>
+            </div>
+          </div>
+        `;
+      });
+      
+      container.innerHTML = html;
+      subtotalEl.textContent = '$' + subtotal.toFixed(2);
+      totalEl.textContent = '$' + subtotal.toFixed(2);
+      cartDataEl.value = JSON.stringify(cart);
+      document.getElementById('submit-payment').disabled = false;
+      
+      const currentOrderId = ensureDraftOrderId();
+      orderIdSection.style.display = 'block';
+      orderIdEl.textContent = '#' + currentOrderId;
+      orderIdInput.value = currentOrderId;
+      
+      attachCartItemEvents();
+      syncDraftOrder(cart, currentOrderId);
+    }
+    
+    function syncDraftOrder(cartItems, currentOrderId) {
+      if (syncingDraft || cartItems.length === 0) return;
+      syncingDraft = true;
+      
+      fetch('{{ url_for("order.create_draft_order") }}', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          order_id: currentOrderId,
+          cart_data: cartItems
+        })
+      })
+      .then(response => response.json())
+      .then(data => {
+        if (!(data.success && data.order_id)) {
+          document.getElementById('order-id-display').textContent = 'Error';
+        }
+      })
+      .catch(error => {
+        console.error('Error syncing draft order:', error);
+        document.getElementById('order-id-display').textContent = 'Error';
+      })
+      .finally(() => {
+        syncingDraft = false;
+      });
+    }
+    
+    function deleteDraftOrderFromServer(orderId) {
+      if (!orderId) return;
+      fetch('{{ url_for("order.delete_draft_order") }}', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ order_id: orderId })
+      }).catch(err => console.error('Error deleting draft order:', err));
+    }
+    
+    function removeCartItem(itemId) {
+      cart = cart.filter(item => item.id !== itemId);
+      localStorage.setItem('cart', JSON.stringify(cart));
+      updateCartBadge();
+      renderCartItems();
+    }
+    
+    function cancelCart() {
+      deleteDraftOrderFromServer(draftOrderId);
+      draftOrderId = null;
+      cart = [];
+      localStorage.removeItem('cart');
+      localStorage.removeItem('draftOrderId');
+      updateCartBadge();
+      renderCartItems();
+    }
+    
+    // Load cart items on page load
+    document.addEventListener('DOMContentLoaded', function() {
+      renderCartItems();
+    });
+  </script>
+{% endblock %}
+
