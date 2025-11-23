@@ -83,5 +83,5 @@ This project is part of an academic assignment.
 ## 📞 Support
 
 For questions or issues, please contact:
-- Email: 
+- Email: support@medireach.com
 - Phone: +250794903699
